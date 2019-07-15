@@ -1,35 +1,38 @@
-// dummy database
 
-const post1 = {id: 1,
-    title: "Salam",
-    body: "This is my first post."}
-const post2 = {id: 2,
-    title: "Why I'm here?",
-    body: "To explore this technology and see how can I apply it for my own purposes"}
-const post3 = {id: 3,
-    title: "What will happen next?",
-    body: "InshaAllah I will create a website of for one of my projects"}
-
-const allPosts = [post1, post2, post3]
 
 module.exports = {
-    posts: function(req, res) {
-        
-         res.send(allPosts)
+    posts: async function(req, res) {
+        try {
+            const posts = await Post.find()
+            return res.send(posts)
+        } catch(err) {
+            return res.serverError(err.toString())
+        }
+
+        // Post.find().exec(function(err, posts) {
+        //     if (err) {
+                
+        //     }
+        //     sails.log.debug('finished fetching all Post objects')
+        //     return res.send(posts)
+        // })
     },
 
     create: function(req, res) {
 
-        const title = req.param('title')
-        const body = req.param('body')
+        const title = req.body.title
+        const description = req.body.description
+        
+        sails.log.debug(title + " " + description)
 
-        sails.log.debug(title + " " + body)
-        const newPost = {id: allPosts.length + 1, 
-            title: title, 
-            body: body}
-
-        allPosts.push(newPost)
-        res.end()
+        Post.create({title: title, description: description}).exec( function(err) {
+            if (err) {
+                return res.serverError(err.toString())
+            }
+            sails.log.debug('finished creating Post object')
+            return res.end()
+        })
+        
     },
 
     findById: function(req, res) {
@@ -45,5 +48,29 @@ module.exports = {
         }
 
         res.send(postId)
+    },
+
+    delete: async function(req, res) {
+        const postId = req.param('postId')
+        
+        try {
+            await Post.destroy({id: postId})
+            res.send('Deleted post at id: ' + postId)
+        } catch(err) {
+            return res.serverError(err.toString())
+        }
+    },
+
+    populate: async function(req, res) {
+        await Post.create({title: "Salam",
+            description: "This is my first post."})
+   
+        await Post.create({title: "Why I'm here?", 
+            description: "To explore this technology and see how can I apply it for my own purposes"})
+        
+        await Post.create({title: "What will happen next?",
+            description: "InshaAllah I will create a website for one of my projects"})
+        
+        res.send('posts populated succesfully')
     }
 }
