@@ -11,7 +11,7 @@ module.exports = {
 
         // Post.find().exec(function(err, posts) {
         //     if (err) {
-                
+        //          return res.serverError(err.toString())
         //     }
         //     sails.log.debug('finished fetching all Post objects')
         //     return res.send(posts)
@@ -30,7 +30,7 @@ module.exports = {
                 return res.serverError(err.toString())
             }
             sails.log.debug('finished creating Post object')
-            return res.end()
+            return res.redirect('/home')
         })
         
     },
