@@ -19,7 +19,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': { view: 'pages/homepage' },
+  '/': '/home',
   '/posts': 'PostController.posts',
   
   'GET /post/:postId': 'PostController.findById',
