@@ -11,20 +11,10 @@
 
 module.exports.bootstrap = async function() {
 
-  // By convention, this is a good place to set up fake data during development.
-  //
-  // For example:
-  // ```
-  // // Set up fake development data (or if we already have some, avast)
-  // if (await User.count() > 0) {
-  //   return;
-  // }
-  //
-  // await User.createEach([
-  //   { emailAddress: 'ry@example.com', fullName: 'Ryan Dahl', },
-  //   { emailAddress: 'rachael@example.com', fullName: 'Rachael Shaw', },
-  //   // etc.
-  // ]);
-  // ```
+  //If the environment is production, then listen on port 80 
+  if(sails.config.environment === "production") {
+    http.createServer( sails.hooks.http.app ).listen( 80 );        
+  }
+  cb();
 
 };

@@ -70,7 +70,15 @@ module.exports = {
       * https://sailsjs.com/config/datastores                                     *
       *                                                                           *
       ****************************************************************************/
-      // ssl: true,
+      ssl: {
+        ca: require('fs').readFileSync(__dirname + '/ssl/ca.ca-bundle'),
+        key: require('fs').readFileSync(__dirname + '/ssl/key.key'),
+        cert: require('fs').readFileSync(__dirname + '/ssl/cert.crt')
+      },
+      port: 443,
+      policies: {
+        '*': 'isHTTPS'
+      }
 
     },
 
